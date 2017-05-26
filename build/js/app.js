@@ -4,27 +4,36 @@ exports.apiKey = "a526379f168fb5cf948f0dfac30182b6";
 },{}],2:[function(require,module,exports){
 var apiKey = require('./../.env').apiKey;
 
+Doc = function () {
+};
+
+
+Doc.prototype.getDoctors = function(medicalIssue) {
+  $.get('https://api.betterdoctor.com/2016-03-01/doctors?query='+ medicalIssue+'&location=45.5231%2C-122.6765%2C%205&user_location=45.5231%2C-122.6765&skip=0&limit=20&user_key=' + apiKey)
+   .then(function(result) {
+      console.log(result);
+    })
+   .fail(function(error){
+      console.log("fail");
+    });
+};
+
+exports.docModule = Doc;
+
+},{"./../.env":1}],3:[function(require,module,exports){
+var Doc = require('./../js/doctor.js').docModule;
+
+var displayDoctors = function (medicalIssue, doctorsData) {
+  $('.showDoctors').text("The doctors near you for " + medicalIssue + " are " + doctorsData);
+};
 
 $(document).ready(function() {
-  $('#weather-location').click(function() {
-    var city = $('#location').val();
-    $('#location').val("");
-    $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey).then(function(response) {
-      $('.showWeather').text("The humidity in " + city + " is " + response.main.humidity + "%");
-    }).fail(function(error) {
-        $('.showWeather').text(error.responseJSON.message);
-      });
-  });
-
-  $('#current-temperature').click(function() {
-    var city = $('#location').val();
-    $('#location').val("");
-    $.get('http://api.openweathermap.org/data/2.5/weather?q=' + city + '&appid=' + apiKey).then( function(response) {
-      $('.showWeather').html("<h3>" + "The temperature in " + city + " is " + ((response.main.temp) - 273.15).toFixed(2) + " C" +  "</h3>" + "<br>" + "<h3>" + "The temperature F in " + city + " is " + ((response.main.temp)*(9/5) - 459.67).toFixed(2) + " F" + "</h3>");
-    }).fail(function(error) {
-        $('.showWeather').text(error.responseJSON.message);
-      });
+  var currentDoctorObject = new Doc()
+  $('#submitIssue').click(function() {
+    var medicalIssue = $('#medicalIssue').val();
+    $('#medicalIssue').val("");
+    currentDoctorObject.getDoctors(medicalIssue, displayDoctors);
   });
 });
 
-},{"./../.env":1}]},{},[2]);
+},{"./../js/doctor.js":2}]},{},[3]);
