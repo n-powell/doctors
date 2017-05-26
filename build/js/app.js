@@ -11,8 +11,8 @@ Doc = function () {
 Doc.prototype.getDoctors = function(medicalIssue, displayDoctors) {
   $.get('https://api.betterdoctor.com/2016-03-01/doctors?query='+ medicalIssue + '&location=45.512794%2C%20-122.679565%2C100&user_location=45.5231%2C-122.6765&skip=0&limit=10&user_key=' + apiKey)
    .then(function(result) {
-     displayDoctors(medicalIssue, result);
-      console.log(result);
+     displayDoctors(result.data);
+      console.log(result.meta.item_type);
     })
    .fail(function(error){
       console.log("fail");
@@ -24,12 +24,14 @@ exports.docModule = Doc;
 },{"./../.env":1}],3:[function(require,module,exports){
 var Doc = require('./../js/doctor.js').docModule;
 
-var displayDoctors = function (medicalIssue, doctorsData) {
-  $('.showDoctors').text("The doctors near you for " + medicalIssue + " are " + doctorsData);
+var displayDoctors = function (doctors) {
+  doctors.forEach(function(doctor){
+      $('#showDoctors').append(doctor.profile.first_name);
+  });
 };
 
 $(document).ready(function() {
-  var currentDoctorObject = new Doc()
+  var currentDoctorObject = new Doc();
   $('#submitIssue').click(function() {
     var medicalIssue = $('#medicalIssue').val();
     $('#medicalIssue').val("");
