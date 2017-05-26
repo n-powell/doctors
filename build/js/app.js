@@ -9,7 +9,7 @@ Doc = function () {
 
 
 Doc.prototype.getDoctors = function(medicalIssue, displayDoctors) {
-  $.get('https://api.betterdoctor.com/2016-03-01/doctors?query='+ medicalIssue + '&location=45.512794%2C%20-122.679565%2C100&user_location=45.5231%2C-122.6765&skip=0&limit=10&user_key=' + apiKey)
+  $.get('https://api.betterdoctor.com/2016-03-01/doctors?query='+ medicalIssue + '&location=45.512794%2C%20-122.679565%2C100&user_location=45.5231%2C-122.6765&skip=0&limit=50&user_key=' + apiKey)
    .then(function(result) {
      displayDoctors(result);
       console.log(result.meta.item_type);
@@ -27,7 +27,7 @@ var Doc = require('./../js/doctor.js').docModule;
 var displayDoctors = function (doctors) {
   $('#showDoctors').text("")
   doctors.data.forEach(function(doctor){
-      $('#showDoctors').append('<li>'+ '<img src=' + doctor.profile.image_url + '>' + doctor.profile.first_name + ' ' + doctor.profile.last_name + '<br>' +  doctor.profile.bio + '<br>' + '<a href=\"' + doctor.practices[0].website + '\">Visit my website</a>' + '<br>' + '</li>' + '<br>');
+      $('#showDoctors').append('<li>'+ '<img src=' + doctor.profile.image_url + '>' + doctor.profile.first_name + ' ' + doctor.profile.last_name + '<br>' +  doctor.profile.bio + '<br>' + '<a href=\"' + doctor.practices[0].website + '\">Visit my website</a>' + '<br>' + doctor.practices[0].phones[0].number + '<br>' + '</li>' + '<br>');
   });
 };
 
