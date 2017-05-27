@@ -17,8 +17,6 @@ _This app allows a user to input and ailment, pain, concern, or body part into t
 ## Setup/Installation Requirements
 _Be sure to have gulp and bower installed on your machine_
 
-### Access Atom Files
-
 * _Ensure connection to the Internet_
 * _Once in terminal enter the following commands to clone and open the file repository:_
 ```
